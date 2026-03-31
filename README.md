@@ -31,6 +31,25 @@ The official Hedera SDK for Python requires a JVM under the hood. That's a non-s
 
 ---
 
+## Limitations & Trade-offs
+
+`hedera-py-lite` is deliberately **minimal and hand-rolled** for maximum lightness in serverless environments:
+
+- **Manual protobuf serialization** instead of using Hedera’s official generated code (`hedera-protobufs`).  
+  → Extremely small and fast, but requires manual updates whenever Hedera adds new fields or transaction types.
+
+- **Maintenance** is currently handled by a single maintainer.  
+  → New Hedera features (HIPs, new transaction types, etc.) will need to be implemented manually.
+
+- **Security surface** of the custom serializer is higher than the battle-tested `google.protobuf` library used by `hiero-sdk-python`.  
+  → The library includes aggressive property-based tests, but it has not yet received a formal security audit.
+
+- **Best suited for** simple transaction flows, DePIN/IoT devices, Web2.5 custodial wallets, and serverless backends.  
+  For full-featured applications, consider the official `hiero-sdk-python` or `hedera-agent-kit`.
+
+This library was built to solve the exact JVM/serverless pain I faced while building **Hedera Flow**. It is production-ready for its intended scope, but please review the code and test thoroughly for your use case.
+
+---
 ## Installation
 
 ```bash
