@@ -1,0 +1,18 @@
+# Kiro IDE
+.kiro/
+
+# Test artifacts
+.hypothesis/
+.pytest_cache/
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+*.env.local
