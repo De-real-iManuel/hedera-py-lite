@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Lightweight, JVM-free Python client for the Hedera network"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { file = "LICENSE" }
+license = "MIT"
 authors = [
     { name = "Emmanuel Okechukwu Nwajari", email = "De-real-iManuel@hotmail.com" },
 ]
@@ -16,7 +16,6 @@ keywords = ["hedera", "hashgraph", "hbar", "hcs", "blockchain", "grpc", "web3"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
