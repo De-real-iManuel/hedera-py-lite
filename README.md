@@ -7,7 +7,140 @@ No `hedera-sdk-py`. No JVM. No hashio relay. Just pure Python — built for serv
 [![PyPI version](https://img.shields.io/pypi/v/hedera-py-lite.svg)](https://pypi.org/project/hedera-py-lite/)
 [![Python](https://img.shields.io/pypi/pyversions/hedera-py-lite.svg)](https://pypi.org/project/hedera-py-lite/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/imanuel-dev/hedera-py-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/imanuel-dev/hedera-py-lite/actions/workflows/ci.yml)
+[![CI](https://github.com/De-real-iManuel/hedera-py-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/De-real-iManuel/hedera-py-lite/actions/workflows/ci.yml)
+
+---
+
+## Code Snapshot
+
+The library is intentionally small. Here's what the full source looks like:
+
+![hedera-py-lite source — start](snapshots/hederapylite-main.png)
+*Top of the file: imports, constants, and the `HederaClient.__init__` constructor with credential loading and key detection.*
+
+![hedera-py-lite source — middle](snapshots/hederapylite-body.png)
+*Core transaction methods: `create_account`, `transfer_hbar`, and `submit_hcs_message` — each delegating to the proto, signing, and network layers.*
+
+![hedera-py-lite source — end](snapshots/hederapylite-tail.png)
+*Mirror node helpers: `get_balance` and `account_exists`, plus the module-level `__all__` export.*
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    subgraph Client["hedera_py_lite (library)"]
+        API["Public API\nHederaClient"]
+        PROTO["Protobuf Layer\nproto.py"]
+        SIGN["Signing Layer\nsigning.py"]
+        NET["Network Layer\nnetwork.py"]
+        MIRROR["Mirror Node\nmirror.py"]
+    end
+
+    subgraph Hedera["Hedera Network"]
+        NODE1["Consensus Node\n0.testnet.hedera.com:50211"]
+        NODE2["Consensus Node\n1.testnet.hedera.com:50211"]
+        MIRROR_API["Mirror Node REST\ntestnet.mirrornode.hedera.com"]
+    end
+
+    subgraph Signing["Key Providers"]
+        ED["Ed25519\n(cryptography lib)"]
+        SECP["secp256k1\n(cryptography lib)"]
+        KMS["AWS KMS\n(optional pattern)"]
+    end
+
+    API --> PROTO
+    API --> SIGN
+    API --> NET
+    API --> MIRROR
+    SIGN --> ED
+    SIGN --> SECP
+    SIGN -.->|"optional"| KMS
+    NET -->|"gRPC unary"| NODE1
+    NET -->|"gRPC unary"| NODE2
+    MIRROR -->|"REST HTTP"| MIRROR_API
+```
+
+---
+
+## Sequence Diagrams
+
+### Account Creation
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant HederaClient
+    participant ProtoLayer
+    participant SigningLayer
+    participant ConsensusNode
+    participant MirrorNode
+
+    App->>HederaClient: create_account(initial_balance_hbar=10)
+    HederaClient->>HederaClient: generate Ed25519 keypair
+    HederaClient->>ProtoLayer: build_crypto_create(pub_key, tinybars)
+    ProtoLayer-->>HederaClient: CryptoCreateTransactionBody bytes
+    HederaClient->>ProtoLayer: build_transaction_body(payer, node, fee, inner)
+    ProtoLayer-->>HederaClient: TransactionBody bytes
+    HederaClient->>SigningLayer: sign_body(body_bytes, operator_key)
+    SigningLayer-->>HederaClient: Transaction bytes
+    HederaClient->>ConsensusNode: gRPC /proto.CryptoService/createAccount
+    ConsensusNode-->>HederaClient: TransactionResponse (precheck code)
+    HederaClient->>MirrorNode: GET /api/v1/transactions/{tx_id} (poll)
+    MirrorNode-->>HederaClient: entity_id (new account)
+    HederaClient-->>App: (account_id, private_key_hex)
+```
+
+### HBAR Transfer
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant HederaClient
+    participant ProtoLayer
+    participant SigningLayer
+    participant ConsensusNode
+
+    App->>HederaClient: transfer_hbar(to, amount, memo, payer, payer_key)
+    HederaClient->>ProtoLayer: build_crypto_transfer([(payer, -tinybars), (to, +tinybars)])
+    ProtoLayer-->>HederaClient: CryptoTransferTransactionBody bytes
+    HederaClient->>ProtoLayer: build_transaction_body(payer, node, fee, inner_field=14)
+    ProtoLayer-->>HederaClient: TransactionBody bytes
+    HederaClient->>SigningLayer: sign_body(body_bytes, key_hex)
+    SigningLayer-->>HederaClient: Transaction bytes
+    loop Try each testnet node
+        HederaClient->>ConsensusNode: gRPC /proto.CryptoService/cryptoTransfer
+        ConsensusNode-->>HederaClient: precheck code (0=OK, 11=busy, other=error)
+    end
+    HederaClient-->>App: tx_id string
+```
+
+### HCS Message Submission
+
+```mermaid
+sequenceDiagram
+    participant App
+    participant HederaClient
+    participant ProtoLayer
+    participant SigningLayer
+    participant ConsensusNode
+    participant MirrorNode
+
+    App->>HederaClient: submit_hcs_message(topic_id, payload)
+    HederaClient->>ProtoLayer: build_consensus_submit_message(topic_id, msg_bytes)
+    ProtoLayer-->>HederaClient: ConsensusSubmitMessageTransactionBody bytes
+    HederaClient->>ProtoLayer: build_transaction_body(payer, node, fee, inner_field=27)
+    ProtoLayer-->>HederaClient: TransactionBody bytes
+    HederaClient->>SigningLayer: sign_body(body_bytes, operator_key)
+    SigningLayer-->>HederaClient: Transaction bytes
+    HederaClient->>ConsensusNode: gRPC /proto.ConsensusService/submitMessage
+    ConsensusNode-->>HederaClient: precheck code
+    HederaClient->>MirrorNode: GET /api/v1/transactions/{tx_id} (poll consensus_timestamp)
+    HederaClient->>MirrorNode: GET /api/v1/topics/{topic_id}/messages (match timestamp)
+    MirrorNode-->>HederaClient: sequence_number
+    HederaClient-->>App: {topic_id, sequence_number, tx_id, submitted}
+```
 
 ---
 
