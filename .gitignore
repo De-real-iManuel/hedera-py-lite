@@ -16,3 +16,7 @@ __pycache__/
 # Environment
 .env
 *.env.local
+
+# Generated exports
+topic_messages.json
+topic_messages.csv

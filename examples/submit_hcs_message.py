@@ -20,7 +20,7 @@ client = HederaClient(operator_id, operator_key, network=network)
 
 payload = {"event": "hello", "source": "hedera-py-lite", "version": "0.1.0"}
 
-print(f"Submitting HCS message to topic {topic_id} on {network}...")
+print(f"Submitting HCS message to topic {topic_id} on testnet...")
 result = client.submit_hcs_message(topic_id, payload)
 
 if result["submitted"]:

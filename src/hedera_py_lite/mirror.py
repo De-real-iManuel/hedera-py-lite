@@ -13,10 +13,12 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-_MIRROR_BASES = {
-    "mainnet": "https://mainnet-public.mirrornode.hedera.com/api/v1",
-    "testnet": "https://testnet.mirrornode.hedera.com/api/v1",
+_MIRROR_HOSTS = {
+    "mainnet": "mainnet-public.mirrornode.hedera.com",
+    "testnet": "testnet.mirrornode.hedera.com",
 }
+
+_MIRROR_BASES = {k: f"https://{v}/api/v1" for k, v in _MIRROR_HOSTS.items()}
 
 
 def mirror_base(network: str = "testnet") -> str:
@@ -24,13 +26,84 @@ def mirror_base(network: str = "testnet") -> str:
     return _MIRROR_BASES[network]
 
 
+def _mirror_get(
+    url: str,
+    params: dict | None = None,
+    timeout: int = 10,
+) -> requests.Response:
+    """Hardened GET for Mirror Node calls.
+
+    Raises:
+        LookupError: on HTTP 404
+        RuntimeError: on any other non-2xx response
+    """
+    resp = requests.get(url, params=params, timeout=timeout)
+    if resp.status_code == 404:
+        raise LookupError(f"Not found: {url}")
+    if not resp.ok:
+        raise RuntimeError(
+            f"Mirror Node error {resp.status_code} for {url}: {resp.text[:200]}"
+        )
+    logger.debug("Mirror GET %s -> %d", url, resp.status_code)
+    return resp
+
+
+def get_topic_messages(
+    topic_id: str,
+    network: str,
+    start_time: str | None = None,
+    end_time: str | None = None,
+    limit: int = 100,
+) -> list[dict]:
+    """Fetch all HCS messages for a topic from the Mirror Node, with pagination.
+
+    Args:
+        topic_id:   Hedera topic ID, e.g. "0.0.1234"
+        network:    "testnet" or "mainnet"
+        start_time: Optional timestamp filter (ISO-8601 or Unix seconds string)
+        end_time:   Optional timestamp filter
+        limit:      Page size per request (max 100)
+
+    Returns:
+        List of raw message dicts from the Mirror Node API.
+
+    Raises:
+        LookupError: if the topic is not found (404)
+        RuntimeError: on Mirror Node errors
+    """
+    base = mirror_base(network)
+    params: dict = {"limit": min(limit, 100), "order": "asc"}
+    if start_time:
+        params["timestamp"] = f"gte:{start_time}"
+    if end_time:
+        # append second timestamp filter if start_time already set
+        existing = params.get("timestamp")
+        if existing:
+            params["timestamp"] = [existing, f"lte:{end_time}"]
+        else:
+            params["timestamp"] = f"lte:{end_time}"
+
+    messages: list[dict] = []
+    url: str | None = f"{base}/topics/{topic_id}/messages"
+
+    while url:
+        resp = _mirror_get(url, params=params)
+        data = resp.json()
+        messages.extend(data.get("messages", []))
+        next_link = data.get("links", {}).get("next")
+        if next_link:
+            url = f"https://{_MIRROR_HOSTS[network]}{next_link}"
+            params = {}  # params are baked into the next URL
+        else:
+            url = None
+
+    return messages
+
+
 def _format_mirror_tx_id(tx_id_str: str) -> str:
     """Convert '0.0.X@secs.nanos' to '0.0.X-secs-nanos' for mirror node URLs."""
-    # Split on '@' to separate account from timestamp
     account, timestamp = tx_id_str.split("@")
-    # Replace the '.' in the timestamp with '-'
-    timestamp_dashed = timestamp.replace(".", "-")
-    return f"{account}-{timestamp_dashed}"
+    return f"{account}-{timestamp.replace('.', '-')}"
 
 
 def poll_for_account_id(tx_id_str: str, network: str, max_attempts: int = 20) -> str:
@@ -47,8 +120,7 @@ def poll_for_account_id(tx_id_str: str, network: str, max_attempts: int = 20) ->
         try:
             resp = requests.get(url, timeout=10)
             if resp.status_code == 200:
-                data = resp.json()
-                txs = data.get("transactions", [])
+                txs = resp.json().get("transactions", [])
                 if txs:
                     entity_id = txs[0].get("entity_id")
                     if entity_id:

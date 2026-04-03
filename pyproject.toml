@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hedera-py-lite"
-version = "0.1.0"
+version = "0.2.0"
 description = "Lightweight, JVM-free Python client for the Hedera network"
 readme = "README.md"
 requires-python = ">=3.11"

@@ -6,7 +6,25 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 
 ---
 
-## [0.1.0] — 2026-31-03
+## [0.2.0] — 2026-04-04
+
+### Added
+
+- `export_topic_messages()` — export all HCS topic messages as JSON or CSV with auto base64 decoding, JSON parsing, and summary statistics (total messages, first/last sequence number, date range)
+- `get_topic_messages()` on `HederaClient` — fetch decoded HCS messages directly without file export
+- `get_topic_messages()` in `mirror.py` — paginated Mirror Node fetch with optional `start_time` / `end_time` filters
+- `_mirror_get()` hardened HTTP helper — raises `LookupError` on 404, `RuntimeError` on other non-2xx responses
+- `_decode_message()` helper — base64 → UTF-8 → JSON decode pipeline with silent fallback at each step
+- Full test suite for all new functionality (`tests/test_export_topic_messages.py`) including property-based tests via Hypothesis
+
+### Changed
+
+- `mirror.py` refactored to use `_MIRROR_HOSTS` dict alongside `_MIRROR_BASES` to support pagination link resolution
+- `_format_mirror_tx_id()` simplified
+
+---
+
+## [0.1.0] — 2026-03-31
 
 ### Added
 

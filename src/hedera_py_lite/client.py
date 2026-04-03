@@ -6,6 +6,9 @@ for account creation, HBAR transfers, and HCS message submission.
 """
 from __future__ import annotations
 
+import base64
+import csv
+import io
 import json
 import logging
 import time
@@ -253,3 +256,109 @@ class HederaClient:
     def account_exists(self, account_id: str) -> bool:
         """Return True if the account exists on the mirror node."""
         return mirror.account_exists(account_id, self.network)
+
+    # ------------------------------------------------------------------
+    # get_topic_messages / export_topic_messages
+    # ------------------------------------------------------------------
+
+    def get_topic_messages(
+        self,
+        topic_id: str,
+        start_time: str | None = None,
+        end_time: str | None = None,
+    ) -> list[dict]:
+        """Fetch all HCS messages for a topic, with optional date range.
+
+        Returns a list of decoded message dicts (see _decode_message).
+        Raises LookupError if the topic is not found, RuntimeError on Mirror Node errors.
+        """
+        raw = mirror.get_topic_messages(topic_id, self.network, start_time, end_time)
+        return [_decode_message(m, decode_base64=True) for m in raw]
+
+    def export_topic_messages(
+        self,
+        topic_id: str,
+        start_time: str | None = None,
+        end_time: str | None = None,
+        fmt: str = "json",
+        decode_base64: bool = True,
+    ) -> str:
+        """Export all HCS messages for a topic as JSON or CSV.
+
+        Args:
+            topic_id:      Hedera topic ID, e.g. "0.0.1234"
+            start_time:    Optional ISO-8601 or Unix timestamp (e.g. "2024-01-01T00:00:00Z")
+            end_time:      Optional ISO-8601 or Unix timestamp
+            fmt:           "json" (default) or "csv"
+            decode_base64: Auto-decode base64 message content (default True)
+
+        Returns:
+            JSON string or CSV string with messages + summary statistics.
+
+        Raises:
+            ValueError: if fmt is not "json" or "csv"
+            LookupError: if the topic is not found
+            RuntimeError: on Mirror Node errors
+        """
+        if fmt not in ("json", "csv"):
+            raise ValueError(f"fmt must be 'json' or 'csv', got {fmt!r}")
+
+        raw = mirror.get_topic_messages(topic_id, self.network, start_time, end_time)
+        records = [_decode_message(m, decode_base64) for m in raw]
+
+        summary = {
+            "topic_id": topic_id,
+            "total_messages": len(records),
+            "first_sequence": records[0]["sequence_number"] if records else None,
+            "last_sequence": records[-1]["sequence_number"] if records else None,
+            "start_time": start_time,
+            "end_time": end_time,
+        }
+
+        if fmt == "json":
+            return json.dumps({"summary": summary, "messages": records}, indent=2)
+
+        # CSV output
+        out = io.StringIO()
+        if records:
+            writer = csv.DictWriter(out, fieldnames=list(records[0].keys()))
+            writer.writeheader()
+            writer.writerows(records)
+        return out.getvalue()
+
+
+# ---------------------------------------------------------------------------
+# Module-level helpers
+# ---------------------------------------------------------------------------
+
+def _decode_message(msg: dict, decode_base64: bool = True) -> dict:
+    """Normalize a raw Mirror Node message dict into a clean record.
+
+    Attempts base64 decode → UTF-8 decode → JSON parse in sequence.
+    Any step that fails is silently skipped; the raw base64 is always preserved.
+    """
+    content = msg.get("message", "")
+    decoded_text: str | None = None
+    decoded_json: dict | list | None = None
+
+    if decode_base64 and content:
+        try:
+            raw_bytes = base64.b64decode(content)
+            decoded_text = raw_bytes.decode("utf-8")
+            try:
+                decoded_json = json.loads(decoded_text)
+            except json.JSONDecodeError:
+                pass
+        except Exception:
+            pass
+
+    return {
+        "sequence_number": msg.get("sequence_number"),
+        "consensus_timestamp": msg.get("consensus_timestamp"),
+        "topic_id": msg.get("topic_id"),
+        "message_b64": content,
+        "message_text": decoded_text,
+        "message_json": decoded_json,
+        "running_hash": msg.get("running_hash"),
+        "payer_account_id": msg.get("payer_account_id"),
+    }
