@@ -87,16 +87,21 @@ src/hedera_py_lite/
 ├── proto.py        # Manual protobuf serialization primitives
 ├── signing.py      # Key loading, algorithm detection, transaction signing
 ├── network.py      # gRPC submission with node failover
-└── mirror.py       # Mirror Node REST polling
+└── mirror.py       # Mirror Node REST polling and topic export
 tests/
 ├── test_proto.py   # Protobuf primitive and builder tests
 ├── test_signing.py # Signing layer tests
 ├── test_mirror.py  # Mirror Node layer tests
-└── test_network.py # Network layer tests
+├── test_network.py # Network layer tests
+└── test_export_topic_messages.py  # export_topic_messages tests
 examples/
 ├── create_account.py
 ├── send_hbar.py
-└── submit_hcs_message.py
+├── submit_hcs_message.py
+├── export_topic_messages.py
+└── output/
+    ├── topic_messages.json
+    └── topic_messages.csv
 ```
 
 ---

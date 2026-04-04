@@ -1,0 +1,195 @@
+{
+  "summary": {
+    "topic_id": "0.0.8052389",
+    "total_messages": 13,
+    "first_sequence": 1,
+    "last_sequence": 13,
+    "start_time": null,
+    "end_time": null
+  },
+  "messages": [
+    {
+      "sequence_number": 1,
+      "consensus_timestamp": "1772273648.702887000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJ0eXBlIjogIlRFU1QiLCAidGltZXN0YW1wIjogMTc3MjI3MDAzMCwgIm1lc3NhZ2UiOiAiSENTIGxvZ2dpbmcgdGVzdCBmcm9tIEhlZGVyYSBGbG93IiwgInRlc3RfaWQiOiAidGVzdC0wMDEifQ==",
+      "message_text": "{\"type\": \"TEST\", \"timestamp\": 1772270030, \"message\": \"HCS logging test from Hedera Flow\", \"test_id\": \"test-001\"}",
+      "message_json": {
+        "type": "TEST",
+        "timestamp": 1772270030,
+        "message": "HCS logging test from Hedera Flow",
+        "test_id": "test-001"
+      },
+      "running_hash": "MBV11NCgjylsBI38GfMXy2KtysHRBhgoJHFH+hCPrM+41UtVkzVYeHA6HkcyAwlf",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 2,
+      "consensus_timestamp": "1774922557.743708000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "+UPv64RLK9Ou2Tv+TxbHtlrwKYX9pDNslVDhGpcVqJXlLorFFbhuG+slxHtY7J1E",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 3,
+      "consensus_timestamp": "1774923336.686352502",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "qKNZxwkkzCucw9vJMWbt7pwo5KZN777zCX8PQ8HrxaIH/dePwqomIEuiHnvV07kT",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 4,
+      "consensus_timestamp": "1774924143.062905069",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "tsUGnvOqlEfuClCBgPaR9NYoswNgk22sovvKthqWqmq7XlcoiOOUKct25In3+X8I",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 5,
+      "consensus_timestamp": "1774929723.173380000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "aLHte7TomUCehOK75He1azl19he3ln4/Y60IXi7camMC5FBDdCDDXGZHOy+XUBgz",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 6,
+      "consensus_timestamp": "1774929831.476962000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "tUuA9FRGhA/DqDJtpBv13Dnr3ngLKliYOMtLYLD/etSH2Hstb5SZdVpqYbB2i8li",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 7,
+      "consensus_timestamp": "1774996958.534693000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "JwgJUVFVJS+a7EN3CAaegYjEKgJeVgOs/YBSEt/x7qghnya2e22n9q4XnSrBN++G",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 8,
+      "consensus_timestamp": "1775034080.303490342",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJoZWxsbyIsICJzb3VyY2UiOiAiaGVkZXJhLXB5LWxpdGUiLCAidmVyc2lvbiI6ICIwLjEuMCJ9",
+      "message_text": "{\"event\": \"hello\", \"source\": \"hedera-py-lite\", \"version\": \"0.1.0\"}",
+      "message_json": {
+        "event": "hello",
+        "source": "hedera-py-lite",
+        "version": "0.1.0"
+      },
+      "running_hash": "Af2y4GpguSSpFpJ3lTh7zR+shtYHShpvoYBMiVgL8s/1cty7Y5SDitLTdEZsVSHT",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 9,
+      "consensus_timestamp": "1775035203.503670000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJoZWxsbyIsICJzb3VyY2UiOiAiaGVkZXJhLXB5LWxpdGUiLCAidmVyc2lvbiI6ICIwLjEuMCJ9",
+      "message_text": "{\"event\": \"hello\", \"source\": \"hedera-py-lite\", \"version\": \"0.1.0\"}",
+      "message_json": {
+        "event": "hello",
+        "source": "hedera-py-lite",
+        "version": "0.1.0"
+      },
+      "running_hash": "DvPmfnjY2LsS4Vc4c5GELXB6dvo0/Wf/qmca2ZxN85nTl0ZncWwkuU1ColsCHv68",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 10,
+      "consensus_timestamp": "1775035211.717844844",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJoZWxsbyIsICJzb3VyY2UiOiAiaGVkZXJhLXB5LWxpdGUiLCAidmVyc2lvbiI6ICIwLjEuMCJ9",
+      "message_text": "{\"event\": \"hello\", \"source\": \"hedera-py-lite\", \"version\": \"0.1.0\"}",
+      "message_json": {
+        "event": "hello",
+        "source": "hedera-py-lite",
+        "version": "0.1.0"
+      },
+      "running_hash": "7G6cNXwCspYmAC4pZ6hxoUks9UeSicVlFC0z/jYizG9THMIy4ijtIdQsNgRt4yCh",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 11,
+      "consensus_timestamp": "1775036169.752017000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJoZWxsbyIsICJzb3VyY2UiOiAiaGVkZXJhLXB5LWxpdGUiLCAidmVyc2lvbiI6ICIwLjEuMCJ9",
+      "message_text": "{\"event\": \"hello\", \"source\": \"hedera-py-lite\", \"version\": \"0.1.0\"}",
+      "message_json": {
+        "event": "hello",
+        "source": "hedera-py-lite",
+        "version": "0.1.0"
+      },
+      "running_hash": "9f4a8AfYQ7zimdWNWAfBUiIexVngm6xz7i8i3EYoCbLt0md/oXEu0vOuFJBei3oR",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 12,
+      "consensus_timestamp": "1775036174.815808000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJoZWxsbyIsICJzb3VyY2UiOiAiaGVkZXJhLXB5LWxpdGUiLCAidmVyc2lvbiI6ICIwLjEuMCJ9",
+      "message_text": "{\"event\": \"hello\", \"source\": \"hedera-py-lite\", \"version\": \"0.1.0\"}",
+      "message_json": {
+        "event": "hello",
+        "source": "hedera-py-lite",
+        "version": "0.1.0"
+      },
+      "running_hash": "8tp4hKNfigKr2+VVxGMarqN4AzPAVCel0lEE2TqqDcf57Hhul/XY1hWVd+pqID2g",
+      "payer_account_id": "0.0.7942957"
+    },
+    {
+      "sequence_number": 13,
+      "consensus_timestamp": "1775259673.625085000",
+      "topic_id": "0.0.8052389",
+      "message_b64": "eyJldmVudCI6ICJpbnRlZ3JhdGlvbl90ZXN0IiwgInNvdXJjZSI6ICJoZWRlcmEtcHktbGl0ZSIsICJuZXR3b3JrIjogInRlc3RuZXQifQ==",
+      "message_text": "{\"event\": \"integration_test\", \"source\": \"hedera-py-lite\", \"network\": \"testnet\"}",
+      "message_json": {
+        "event": "integration_test",
+        "source": "hedera-py-lite",
+        "network": "testnet"
+      },
+      "running_hash": "ImW8MTcaxAa4UJce77NB3SbHl46u0WavXLfkQLpuUJ2lLHRFuFOB5q1suLx7YWkj",
+      "payer_account_id": "0.0.7942957"
+    }
+  ]
+}
