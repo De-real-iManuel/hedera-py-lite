@@ -176,23 +176,6 @@ sequence_number,consensus_timestamp,topic_id,message_b64,message_text,message_js
 
 ---
 
-## Code Snapshots
-
-The library is intentionally small. Here's what the current source looks like:
-
-**`client.py`** — public API: `HederaClient`, all transaction methods, and `export_topic_messages`
-
-![client.py source](snapshots/hederapylite-client.png)
-
-**`mirror.py`** — Mirror Node REST layer: polling, pagination, `get_topic_messages`, `_mirror_get`
-
-![mirror.py source](snapshots/hederapylite-mirror.png)
-
-**`proto.py`** — manual protobuf serialization primitives, no generated code
-
-![proto.py source](snapshots/hederapylite-proto.png)
-
----
 
 ## Architecture
 
